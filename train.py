@@ -1,6 +1,5 @@
 import json
 import os
-from types import prepare_class
 from utils import get_comatrix, preprocess
 from time import sleep, time
 from rich.progress import track
@@ -71,7 +70,7 @@ M = get_comatrix(clean_corpora, args.window_size, vocab)
 
 b = rs.random(size=vocab_len)
 
-Q, h = arnoldi_iteration(M, b, 100)
+Q, h = arnoldi_iteration(M, b, args.embed_dim)
 
 save_dir = f"embed/{args.corpora}/{args.embed_dim}/{args.window_size}/{args.min_word_freq}"
 os.makedirs(save_dir, exist_ok=True)

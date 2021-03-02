@@ -1,0 +1,8 @@
+{
+	"corpora": ["brown"],
+	"embed_dim": [10, 30, 50, 100, 200],
+	"window_size": [2, 3, 4, 5],
+	"min_word_freq": [3, 5, 7, 10],
+	"center_word": ["market", "company", "ltd", "jump"],
+    "n_closest": 5
+}

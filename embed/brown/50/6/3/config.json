@@ -1,0 +1,1 @@
+{"corpora": "brown", "num_samples": 0, "random_seed": 42, "window_size": 6, "embed_dim": 50, "corpora_length": -1, "min_word_freq": 3}

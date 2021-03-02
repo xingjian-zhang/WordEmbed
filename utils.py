@@ -2,6 +2,8 @@ import re
 import numpy as np
 from rich.progress import track
 from nltk.tokenize import RegexpTokenizer
+from collections import defaultdict
+import scipy.sparse as sparse
 
 
 def preprocess(sentence):
@@ -19,7 +21,7 @@ def preprocess(sentence):
 
 def get_comatrix(corpus, win_size, word_dict):
     vocab_len = len(word_dict)
-    W = np.zeros((vocab_len, vocab_len), dtype=np.float32)
+    coo = defaultdict(lambda: 0)
     for sent in track(corpus, description="Extracting Co-Occurrence Matrix...\t"):
         words = sent.split()
         sent_len = len(words)
@@ -37,7 +39,11 @@ def get_comatrix(corpus, win_size, word_dict):
                     context_idx = word_dict[context]
                 except KeyError:
                     continue
-                W[word_idx, context_idx] += 1
+                coo[(word_idx, context_idx)] += 1
+    coordinate = np.array(list(coo.keys())).T
+    data = np.array(list(coo.values()))
+    W = sparse.csr_matrix((data, coordinate), shape=(
+        vocab_len, vocab_len), dtype=np.float32)
     return W
 
 
