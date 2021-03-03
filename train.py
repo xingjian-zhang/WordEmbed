@@ -12,9 +12,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--corpora", type=str, default="brown")
-# parser.add_argument("--verbose", type=int, default=1)
 parser.add_argument("--num_samples", type=int, default=0)
-# parser.add_argument("--log_level", type=int, default=10)
 parser.add_argument("--random_seed", type=int, default=42)
 parser.add_argument("--window_size", type=int, default=5)
 parser.add_argument("--embed_dim", type=int, default=100)
