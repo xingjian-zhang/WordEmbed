@@ -1,3 +1,9 @@
 __pycache__/**
 .vscode/**
+<<<<<<< HEAD
 env/**
+=======
+.ipynb_checkpoints/**
+*.pyc
+>>>>>>> 7cebfafb11acf5974d05b9c6aa5677032efcfd3a
+tmp/**
