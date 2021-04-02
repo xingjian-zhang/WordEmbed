@@ -5,3 +5,5 @@ env/**
 *.pyc
 tmp/**
 dataset/**
+baseline/
+data/
