@@ -7,3 +7,5 @@ env/**
 *.pyc
 >>>>>>> 7cebfafb11acf5974d05b9c6aa5677032efcfd3a
 tmp/**
+baseline/
+data/
