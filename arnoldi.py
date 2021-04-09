@@ -41,7 +41,7 @@ def arnoldi_iteration(A, b, n: int, verbose=False):
     return Q, h
 
 
-def get_new_arnoldi_vec(Q_: np.ndarray, M: np.ndarray, N: int = 1):
+def get_new_arnoldi_vecs(Q: np.ndarray, M: np.ndarray, N: int = 1):
     """Get N new arnoldi vectors.
 
     Args:
@@ -52,7 +52,7 @@ def get_new_arnoldi_vec(Q_: np.ndarray, M: np.ndarray, N: int = 1):
     Returns:
         Q_: New matrix to be appended to Q
     """
-    Q_ = Q_.copy()
+    Q_ = Q.copy()
     v, k = Q_.shape
     if k == 0:
         q = np.random.rand(v)
@@ -61,6 +61,8 @@ def get_new_arnoldi_vec(Q_: np.ndarray, M: np.ndarray, N: int = 1):
             return Q_
         else:
             N = N - 1
+
+    # compute the column space of the matrix Q
     rank = np.linalg.matrix_rank(Q_)
     Q_ortho, _ = np.linalg.qr(Q_)
     Q_ortho = Q_ortho.T[:rank]
@@ -88,3 +90,8 @@ def train(M: np.ndarray, vocab: dict, N: int = 20, dim: int = 100):
     Returns:
         Q: word embeddings matrix
     """
+    v = len(M)
+    Q = np.zeros((v, dim))
+    for i in range(dim / N):
+        Q_ = get_new_arnoldi_vecs(Q, M, N)
+        Q = np.stack((Q, Q_))
