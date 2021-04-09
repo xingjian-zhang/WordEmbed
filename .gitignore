@@ -1,5 +1,5 @@
-__pycache__/**
-.vscode/**
+__pycache__/
+.vscode/
 env/**
 .ipynb_checkpoints/**
 *.pyc
@@ -8,3 +8,4 @@ dataset/**
 baseline/
 data/
 results/
+*.tar

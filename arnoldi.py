@@ -1,5 +1,6 @@
 import numpy as np
 from rich.progress import track
+from inlp.data import extract_train_set
 
 
 def arnoldi_iteration(A, b, n: int, verbose=False):
@@ -38,3 +39,20 @@ def arnoldi_iteration(A, b, n: int, verbose=False):
         else:  # If that happens, stop iterating.
             return Q, h
     return Q, h
+
+
+def get_new_arnoldi_vec(Q: np.ndarray, M: np.ndarray):
+    v, k = Q.shape
+    if k == 0:
+        q = np.random.rand(v)
+        return q / np.linalg.norm(q)
+
+    q = M @ Q[-1]
+    rank = np.linalg.matrix_rank(Q)
+    Q_ortho, _ = np.linalg.qr(Q)
+    Q_ortho = Q_ortho.T[:rank]
+
+    for q_ in Q_ortho:
+        q -= q @ q_ * q_
+
+    return q / np.linalg.norm(q)
