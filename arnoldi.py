@@ -2,7 +2,7 @@ import numpy as np
 from rich.progress import track
 
 
-def arnoldi_iteration(A, b, n: int):
+def arnoldi_iteration(A, b, n: int, verbose=False):
     """Computes a basis of the (n + 1)-Krylov subspace of A: the space
     spanned by {b, Ab, ..., A^n b}.
 
@@ -22,7 +22,9 @@ def arnoldi_iteration(A, b, n: int):
     q = b / np.linalg.norm(b)  # Normalize the input vector
     Q[:, 0] = q  # Use it as the first Krylov vector
 
-    for k in track(range(n), description="Performing Arnoldi Iteration...\t"):
+    for k in track(range(n),
+                   description="Performing Arnoldi Iteration...\t",
+                   disable=not verbose):
         v = A.dot(q)  # Generate a new candidate vector
         for j in range(k + 1):  # Subtract the projections on previous vectors
             h[j, k] = np.dot(Q[:, j].conj(), v)

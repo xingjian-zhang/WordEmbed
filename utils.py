@@ -1,12 +1,23 @@
 import re
-import numpy as np
-from rich.progress import track
-from nltk.tokenize import RegexpTokenizer
 from collections import defaultdict
+
+import numpy as np
 import scipy.sparse as sparse
+from nltk import sent_tokenize
+from nltk.tokenize import RegexpTokenizer
+from rich.progress import track
 
 
-def preprocess(sentence):
+def preprocess(file_path):
+    with open(file_path, 'r') as text_file:
+        data = text_file.read().replace('\n', '')
+        sentences = []
+        for sent in track(sent_tokenize(data), f"Preprocessing {file_path[-15:]}"):
+            sentences.append(preprocess_sent(sent))
+    return sentences
+
+
+def preprocess_sent(sentence):
     sentence = str(sentence)
     sentence = sentence.lower()
     sentence = sentence.replace('{html}', "")

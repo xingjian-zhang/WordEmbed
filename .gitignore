@@ -1,0 +1,10 @@
+__pycache__/**
+.vscode/**
+env/**
+.ipynb_checkpoints/**
+*.pyc
+tmp/**
+dataset/**
+baseline/
+data/
+results/
