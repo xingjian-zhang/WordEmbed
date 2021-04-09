@@ -41,18 +41,50 @@ def arnoldi_iteration(A, b, n: int, verbose=False):
     return Q, h
 
 
-def get_new_arnoldi_vec(Q: np.ndarray, M: np.ndarray):
-    v, k = Q.shape
+def get_new_arnoldi_vec(Q_: np.ndarray, M: np.ndarray, N: int = 1):
+    """Get N new arnoldi vectors.
+
+    Args:
+        Q: Arnoldi matrix
+        M: Source matrix
+        N: Number of new vectors
+
+    Returns:
+        Q_: New matrix to be appended to Q
+    """
+    Q_ = Q_.copy()
+    v, k = Q_.shape
     if k == 0:
         q = np.random.rand(v)
-        return q / np.linalg.norm(q)
-
-    q = M @ Q[-1]
-    rank = np.linalg.matrix_rank(Q)
-    Q_ortho, _ = np.linalg.qr(Q)
+        Q_ = q.reshape(1, -1)
+        if N == 1:
+            return Q_
+        else:
+            N = N - 1
+    rank = np.linalg.matrix_rank(Q_)
+    Q_ortho, _ = np.linalg.qr(Q_)
     Q_ortho = Q_ortho.T[:rank]
 
-    for q_ in Q_ortho:
-        q -= q @ q_ * q_
+    for _ in range(N):
+        q = M @ Q_ortho[-1]  # Q[-1] or Q_ortho[-1]?
+        for q_ in Q_ortho:
+            q -= q @ q_ * q_
+        q = q / np.linalg.norm(q)
+        Q_ortho = np.stack((Q_ortho, q))
 
-    return q / np.linalg.norm(q)
+    Q_ = Q_ortho[-N:]
+    return Q_
+
+
+def train(M: np.ndarray, vocab: dict, N: int = 20, dim: int = 100):
+    """Train netural word embeddings using Arnoldi iteration with chunked INLP
+
+    Args:
+        M: co-occurrence matrix, could be sparse
+        vocab: vocabulary dictionary
+        N: chunk length
+        dim: dimension of the word embeddings
+
+    Returns:
+        Q: word embeddings matrix
+    """
